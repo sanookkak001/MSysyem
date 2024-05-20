@@ -1,0 +1,63 @@
+{% extends 'FrameWork.html'%}
+{% block title %}
+    <title>SandBox</title>
+{% endblock %}
+
+{% block Contents %}
+{% if messages %}
+    {% for i in messages %}
+        <div class="alert" id="alert">
+            {{ i }}
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="box__container" id="Pop-up">
+    <main class="input_container">
+        <section class="input_header">
+                <h1>MSytem</h1>
+                <div class="closepopup">
+                    <i id="closepopup" class='bx bx-exit' ></i>
+                </div>
+        </section>
+        <section class="input_body">
+            <form action="{%url 'Add_History'%}" method="post">
+                {% csrf_token %}
+                <div class="input_box">
+                    <section class="wapper">
+                        <div class="select-btn">
+                            <span style="font-size: 1rem;">Enter Ticker</span>
+                            <i class='bx bx-chevron-down'></i>
+                        </div>
+                        <div class="content-search">
+                            <div class="search">
+                                <i class='bx bx-search-alt-2'></i>
+                                <input type="text" id="searchInput" placeholder="Search" autocomplete="off" name="Ticker" maxlength="10">
+                            </div>
+                            <ul class="option"></ul>
+                        </div>
+                    </section>
+                </div>
+                <div class="input_box">
+                    <input id="Amounts" type="text" autocomplete="off" pattern="[0-9]*[.]?[0-9]{1,7}" placeholder="Enter Amount" maxlength="9" name="Amounts">
+                </div>
+                <div class="input_box">
+                    <input id="AVG" type="text" autocomplete="off" placeholder="Enter Avg Price" pattern="[0-9]*[.]?[0-9]{0,7}" maxlength="15" name="AvgPrice">
+                </div>
+                <div class="input_box">
+                    <input id="date" name="date" type="date">
+                </div>
+                <div class="input_box" style="text-align: center; font-size:small; display:flex; justify-content: start; align-items: center">
+                    <p style="padding-left: 10px;" id="Values" ></p>
+                </div>
+                <div class="input_button">
+                    <button type="submit" id="BtnSaved" disabled class="submit_button">Confrim</button>
+                </div>
+                <div class="input_box" style="text-align: center; font-size:small">
+                    <p>This input Form Bate Version 0.02</p>
+                </div>
+        </form>
+        </section>
+    </main>
+</div>
+{% endblock %}

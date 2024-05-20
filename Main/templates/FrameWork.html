@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/main.css'%}">
+    <link rel="icon" type="image/x-icon" href="{% static 'Images/' %}{{ Images }}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    {% block title %}
+        <title>Document</title>
+    {% endblock %}
+</head>
+<body>
+    <header class="header">
+        <a class="Logo" href="{% url 'index' %}">MSystem</a>
+
+        <input type="checkbox" name="" id="check">
+        <label for="check" class="icon">
+            <i class='bx bx-menu' id="menu-icon"></i>
+            <i class='bx bx-x' id="close-icon"></i>
+        </label>
+
+        <nav class="navbar">
+            <a href="{% url 'index' %}" style="--i:0">Home</a>
+            <a href="{% url 'Stock_information' %}" style="--i:1">USAstock</a>
+            <a href="{% url 'Stock_History_All' %}" style="--i:2">DividendAll</a>
+        </nav>
+    </header>
+    {% block Contents %}
+
+    {% endblock %}
+</body>
+<script src="{% static 'Javascript/script.js'%}"></script>
+</html>

@@ -1,0 +1,221 @@
+{% extends 'FrameWork.html' %}
+{% load static %}
+{% block title %}
+    <title>{{Ticker}} {{ Stock_Fullname }}</title>
+{% endblock %}
+{% block Contents %}
+{% if messages %}
+    {% for i in messages %}
+        <div class="alert" id="alert">
+            {{ i }}
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="box__container" id="stock-info-container">
+    <main class="input_container hidden" id="Pop-up">
+        <section class="input_header">
+                <h1>AddHistory</h1>
+                <div class="closepopup">
+                    <i id="EndPopupNewHistory" class='bx bx-exit' ></i>
+                </div>
+        </section>
+        <section class="input_body">
+            <form action="{%url 'Add_History'%}" method="post">
+                {% csrf_token %}
+                <div class="input_box">
+                    <section class="wapper">
+                        <div class="select-btn">
+                            <span style="font-size: 1rem;">Enter Ticker</span>
+                            <i class='bx bx-chevron-down'></i>
+                        </div>
+                        <div class="content-search">
+                            <div class="search">
+                                <i class='bx bx-search-alt-2'></i>
+                                <input type="text" id="searchInput" placeholder="Search" autocomplete="off" name="Ticker" maxlength="10">
+                            </div>
+                            <ul class="option"></ul>
+                        </div>
+                    </section>
+                </div>
+                <div class="input_box">
+                    <input id="Amounts" type="text" autocomplete="off" pattern="[0-9]*[.]?[0-9]{1,7}" placeholder="Enter Amount" maxlength="9" name="Amounts">
+                </div>
+                <div class="input_box">
+                    <input id="AVG" type="text" autocomplete="off" placeholder="Enter Avg Price" pattern="[0-9]*[.]?[0-9]{0,7}" maxlength="15" name="AvgPrice">
+                </div>
+                <div class="input_box">
+                    <input id="date" name="date" type="date">
+                </div>
+                <div class="input_box" style="text-align: center; font-size:small; display:flex; justify-content: start; align-items: center">
+                    <p style="padding-left: 10px;" id="Values" ></p>
+                </div>
+                <div class="input_button">
+                    <button type="submit" id="BtnSaved" disabled class="submit_button">Confrim</button>
+                </div>
+                <div class="input_box" style="text-align: center; font-size:small">
+                    <p>This input Form Bate Version 0.02</p>
+                </div>
+        </form>
+        </section>
+    </main>
+    <main class="table">
+        <section class="table__header">
+            <h1>BuyandSell {{Ticker}}</h1>
+             <span id="StartPopupNewHistory">NewHistory</span>
+        </section>
+        <section class="table__body">
+            <table class="TableHistory">
+                <thead>
+                    <tr>
+                        <td>No.</td>
+                        <td>Date</td>
+                        <td>Buyandsell</td>
+                        <td>Type</td>
+                        <td>Ticker</td>
+                        <td>Amount</td>
+                        <td>AvgPrice</td>
+                        <td>Values</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if List_Manange %}
+                        {% for i in List_Manange %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ i.Date }}</td>
+                            {% if i.Result == "Sell" %}
+                                <td style="color: red;">{{ i.Result }}</td>
+                            {% else %}
+                                <td style="color: green;">{{ i.Result }}</td>
+                            {% endif %}
+                            <td>{{ i.Type}}</td>
+                            <td>{{ i.Symbol_Ticker}}</td>
+                            <td>{{ i.Amount }}</td>
+                            <td>{{ i.AvgPrice }}</td>
+                            <td>{{ i.Values}}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                    <td colspan="8"> No Data </td>
+                {% endif %}
+                    <tr>
+                        {% if Event %}
+                            <td colspan="4"> Total Buy : <span style="color: green">{{ Buy }} Units </span> Total Event: <span style="color: green">{{ Event }} Units </span> Total Sell: <span style="color: red">{{ Sell }} Units </span> AveragePrice {{ AVG_price }} Dollar</td>
+                            <td colspan="4"> Total Amount_Holding: <span style="color: green">{{ total_Amount }}</span></td>
+                        {% else %}
+                            <td colspan="3"> Total Buy : <span style="color: green">{{ Buy }} Units</span> Total Sell: <span style="color: red">{{ Sell }} Units</span></td>
+                            <td colspan="2"> AveragePrice {{ AVG_price }} Dollar</td>
+                            <td colspan="3">Total Amount_Holding: <span style="color: green">{{ total_Amount }}</span></td>
+                        {% endif %}
+                    </tr>  
+                </tbody>
+            </table>
+        </section>
+        <section class="table__header">
+            <h1>DividendHistory {{Ticker}}</h1>
+            <a href="#">ADD</a>
+        </section>
+        <section class="table__body">
+            <table class="TableHistory">
+                <thead>
+                    <tr>
+                        <td>No.</td>
+                        <td>Channel</td>
+                        <td>Currencry</td>
+                        <td>Tticker</td>
+                        <td>DPS</td>
+                        <td>BeforeTAX</td>
+                        <td>WithholdingTAX</td>
+                        <td>AfterTAX(THB)</td>
+                        <td>Amount</td>
+                        <td>Rate(THB)</td>
+                        <td>Date</td>
+                        <td>Quarter</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if List_Manange_Dividend %}
+                        {% for i in List_Manange_Dividend %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ i.Channel }}</td>
+                            <td>{{ i.Currency}}</td>
+                            <td>{{ i.Ticker }}</td>
+                            <td>{{ i.Dividend_Per_Share }}</td>
+                            <td>{{ i.Before_TAX}}</td>
+                            <td>{{ i.Withholding_TAX }}</td>
+                            <td>{{ i.After_TAX }}</td>
+                            <td>{{ i.Amount_holding }}</td>
+                            <td>{{ i.Rate }}</td>
+                            <td>{{ i.Date }}</td>
+                            {% if 'Q1' in i.Quarter_item %}
+                                <td class="Q1">{{ i.Quarter_item }}</td>
+                            {% elif 'Q2' in i.Quarter_item %} 
+                                <td class="Q2">{{ i.Quarter_item }}</td>
+                            {% elif 'Q3' in i.Quarter_item %} 
+                                <td class="Q3">{{ i.Quarter_item }}</td>
+                            {% else %}
+                                <td class="Q4">{{ i.Quarter_item }}</td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <td colspan="12"> No Data </td>
+                    {% endif %}
+                    <tr>
+                        <td colspan="12">Total Dividend Get: <span style="color: green">{{ total_After_TAX }} THB</span></td>
+                    </tr>                    
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <!-- <main class="table">
+        <section class="table__header">
+            <h1>DividendHistory {{Ticker}}</h1>
+            <a href="#">ADD</a>
+        </section>
+        <section class="table__body">
+            <table class="TableHistory">
+                <thead>
+                    <tr>
+                        <td>No.</td>
+                        <td>Channel</td>
+                        <td>Currencry</td>
+                        <td>Tticker</td>
+                        <td>DPS</td>
+                        <td>BeforeTAX</td>
+                        <td>WithholdingTAX</td>
+                        <td>AfterTAX(THB)</td>
+                        <td>Amount</td>
+                        <td>Rate(THB)</td>
+                        <td>Date</td>
+                        <td>Quarter</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in List_Manange_Dividend %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ i.Channel }}</td>
+                        <td>{{ i.Currency}}</td>
+                        <td>{{ i.Ticker }}</td>
+                        <td>{{ i.Dividend_Per_Share }}</td>
+                        <td>{{ i.Before_TAX}}</td>
+                        <td>{{ i.Withholding_TAX }}</td>
+                        <td>{{ i.After_TAX }}</td>
+                        <td>{{ i.Amount_holding }}</td>
+                        <td>{{ i.Rate }}</td>
+                        <td>{{ i.Date }}</td>
+                        <td>{{ i.Quarter_item }}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="12">Total Dividend Get: <span style="color: green">{{ total_After_TAX }} THB</span></td>
+                    </tr>                    
+                </tbody>
+            </table>
+        </section>
+    </main> -->
+</div>
+{% endblock %}

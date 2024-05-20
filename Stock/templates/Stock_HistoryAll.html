@@ -1,0 +1,56 @@
+{% extends 'FrameWork.html' %}
+{% load static %}
+{% block title %}
+    <title>Stock_History_All</title>
+{% endblock %}
+{% block Contents %}
+<div class="box__container" id="stock-info-container">
+    <main class="table">
+        <section class="table__header">
+            <h1>DividendHistoryAll</h1>
+            <a href="#">ADD</a>
+        </section>
+        <section class="table__body">
+            <table class="TableHistory">
+                <thead>
+                    <tr>
+                        <td>No.</td>
+                        <td>Channel</td>
+                        <td>Currencry</td>
+                        <td>Tticker</td>
+                        <td>DPS</td>
+                        <td>BeforeTAX</td>
+                        <td>WithholdingTAX</td>
+                        <td>AfterTAX(THB)</td>
+                        <td>Amount</td>
+                        <td>Rate(THB)</td>
+                        <td>Date</td>
+                        <td>Quarter</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in List_Manange_Dividend %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ i.Channel }}</td>
+                        <td>{{ i.Currency}}</td>
+                        <td>{{ i.Ticker }}</td>
+                        <td>{{ i.Dividend_Per_Share }}</td>
+                        <td style="color: green;">{{ i.Before_TAX}}</td>
+                        <td style="color: red;">{{ i.Withholding_TAX }}</td>
+                        <td style="color: green;">{{ i.After_TAX }}</td>
+                        <td>{{ i.Amount_holding }}</td>
+                        <td>{{ i.Rate }}</td>
+                        <td>{{ i.Date }}</td>
+                        <td>{{ i.Quarter_item }}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="12">Total Dividend Get: <span style="color: green">{{ total_After_TAX }} THB</span></td>
+                    </tr>                    
+                </tbody>
+            </table>
+        </section>
+    </main>
+</div>
+{% endblock %}

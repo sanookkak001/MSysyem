@@ -1,0 +1,73 @@
+{% extends 'FrameWork.html' %}
+{% load static %}
+{% block title %}
+    <title>OverViews</title>
+{% endblock %}
+
+{% block extra_js %}
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" async></script>
+<script>
+    $(document).ready(function() {
+        // Function to fetch updated stock information via AJAX
+        function fetchStockInfo() {
+            console.log("Fetching stock information...");
+            $.ajax({
+                url: "{% url 'Stock_information' %}",
+                type: 'GET',
+                success: function(data) {
+                    console.log("Received updated stock information:", data);
+                    // Replace the content of stock_info_list with updated data
+                    $('#stock-info-container').html(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    
+        // Call fetchStockInfo function initially
+        fetchStockInfo();
+        console.log("fetchStockInfo function called"); // Log message indicating the function call
+    
+        // Refresh stock information every 10 seconds
+        setInterval(fetchStockInfo, 600000);
+    });   
+</script> -->
+{% endblock %}
+
+{% block Contents %}
+<div class="box__container" id="stock-info-container">
+    {% for i in stock_info_list|dictsort:"Ticker" %}
+    <div class="Stock__Item" id="stock-item-{{ forloop.counter }}" data-id="{{ i.Ticker }}">
+        <div class="content-top">
+            <div class="content-top left">
+                <img src="{% static 'Images/' %}{{ i.Images }}" alt="">
+                <h1>{{ i.Ticker }}</h1>
+            </div>
+            <div class="content-top right">
+                <p>Amount : {{ i.Amount }}</p>
+            </div>
+        </div>
+        <div class="content-title">
+            <p>{{i.Fullname}}</p>
+        </div>
+        <div class="content">
+            <div class="flex-left">
+                <p>Estimate : $<span>{{ i.Estimate }}</span></p>
+                <p>Avg.Price : $<span>{{ i.AvgPrice }}</span></p>
+            </div>
+            <div class="flex-right">
+                {% if i.Result == 'กำไร' %}
+                    <p>Profit/Loss: <span style="color: green;">{{ i.Result }} ({{ i.Precent }} %)</span></p>
+                {% elif i.Result == 'เท่าทุน' %}
+                    <p>Profit/Loss: <span style="color: yellow;">{{ i.Result }} ({{ i.Precent }} %)</span></p>
+                {% else %}
+                    <p>Profit/Loss: <span style="color: red;">{{ i.Result }} ({{ i.Precent }} %)</span></p>
+                {% endif %}
+                <p>Price : $<span>{{ i.Price }}</span></p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
